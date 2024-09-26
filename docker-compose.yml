@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+      - "5174:5174" # Vite uses this port for HMR
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+    stdin_open: true
+    tty: true
+
+  test:
+    build: .
+    command: npm test
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=test
+
+  eslint:
+    build:
+      context: .
+    volumes:
+      - .:/app
+    command: npm run lint
+
+  prettier:
+    build:
+      context: .
+    volumes:
+      - .:/app
+    command: npm run format
